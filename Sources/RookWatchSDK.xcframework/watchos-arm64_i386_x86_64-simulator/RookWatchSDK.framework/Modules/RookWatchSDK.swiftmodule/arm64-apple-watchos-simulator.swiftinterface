@@ -1,0 +1,1455 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.7 (swiftlang-5.7.0.127.4 clang-1400.0.29.50)
+// swift-module-flags: -target arm64-apple-watchos6.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name RookWatchSDK
+// swift-module-flags-ignorable: -enable-bare-slash-regex
+import Foundation
+import HealthKit
+@_exported import RookWatchSDK
+import Swift
+import WatchConnectivity
+import WatchKit
+import _Concurrency
+import _StringProcessing
+public enum LastEventDataSyncType : Swift.String {
+  case physicalHeartRateEvent
+  case bodyHeartRateEvent
+  case physicalOxygenationEvent
+  case bodyOxygenationEvent
+  case activityEvent
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct RookDistanceData : Swift.Codable {
+  public var stepsNumber: Swift.Int?
+  public var stepsGranularDataStepsPerMin: [RookWatchSDK.StepsGranularDataStepsPerHr]?
+  public var walkedDistanceMeters: Swift.Int?, traveledDistanceMeters: Swift.Int?
+  public var traveledDistanceGranularDataMeters: [RookWatchSDK.TraveledDistanceGranularDataMeter]?
+  public var floorsClimbedNumber: Swift.Int?
+  public var floorsClimbedGranularDataFloors: [RookWatchSDK.FloorsClimbedGranularDataFloor]?
+  public var elevationAvgAltitudeMeters: Swift.Int?, elevationMinimumAltitudeMeters: Swift.Int?, elevationMaxAltitudeMeters: Swift.Int?, elevationLossActualAltitudeMeters: Swift.Int?
+  public var elevationGainActualAltitudeMeters: Swift.Int?, elevationPlannedGainMeters: Swift.Int?
+  public var elevationGranularDataMeters: [RookWatchSDK.ElevationGranularDataMeter]?
+  public var swimmingStrokesNumber: Swift.Int?, swimmingNumLapsNumber: Swift.Int?, swimmingPoolLengthMeters: Swift.Int?, swimmingTotalDistanceMeters: Swift.Int?
+  public var swimmingDistanceGranularDataMeters: [RookWatchSDK.SwimmingDistanceGranularDataMeter]?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers final public class RookWatchConnectConfigurator {
+  public static let shared: RookWatchSDK.RookWatchConnectConfigurator
+  final public func setConfiguration(clientUUID: Swift.String, secretKey: Swift.String)
+  final public func setEnvironment(_ environment: RookWatchSDK.RookEnvironment)
+  final public func initRook()
+  final public func initRook(completion: @escaping (Swift.Result<Swift.Bool, Swift.Error>) -> Swift.Void)
+  final public func updateUserId(_ id: Swift.String, completion: @escaping (Swift.Result<Swift.Bool, Swift.Error>) -> Swift.Void)
+  final public func clearUser(completion: @escaping (Swift.Result<Swift.Bool, Swift.Error>) -> Swift.Void)
+  final public func syncUserTimeZone(completion: @escaping (Swift.Result<Swift.Bool, Swift.Error>) -> Swift.Void)
+  @objc deinit
+}
+public struct RookMovementData : Swift.Encodable {
+  public let speedNormalizedMetersPerSecond: Swift.Int?
+  public let speedAvgMetersPerSecond: Swift.Int?
+  public let speedMaxMetersPerSecond: Swift.Int?
+  public let speedGranularDataMetersPerSecond: [RookWatchSDK.RookSpeedGranularItem]?
+  public let velocityVectorAvgSpeedAndDirection: [RookWatchSDK.RookVelocityVectorItem]?
+  public let velocityVectorMaxSpeedAndDirection: [RookWatchSDK.RookVelocityVectorItem]?
+  public let paceAvgMinutesPerKilometer: Swift.Int?
+  public let paceMaxMinutesPerKilometer: Swift.Int?
+  public let cadenceAvgRpm: Swift.Int?
+  public let cadenceMaxRpm: Swift.Int?
+  public let cadenceGranularDataRpm: [RookWatchSDK.RookCadenceGranularItem]?
+  public let torqueAvgNewtonMeters: Swift.Int?
+  public let torqueMaxNewtonMeters: Swift.Int?
+  public let torqueGranularDataNewtonMeters: [RookWatchSDK.RookTorqueGranularItem]?
+  public let lapGranularDataLapsNumber: [RookWatchSDK.RookLapGranularItem]?
+  public func encode(to encoder: Swift.Encoder) throws
+}
+public struct RookActivityLevelGranular : Swift.Encodable {
+  public let dateTime: Foundation.Date
+  public let activityLevel: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+}
+@_inheritsConvenienceInitializers @objc final public class RookExtractionManager : ObjectiveC.NSObject {
+  @objc override dynamic public init()
+  final public func getSleepSummary(date: Foundation.Date, completion: @escaping (Swift.Result<RookWatchSDK.RookSleepData, Swift.Error>) -> Swift.Void)
+  final public func getPhysicalSummary(date: Foundation.Date, completion: @escaping (Swift.Result<RookWatchSDK.RookPhysicalData, Swift.Error>) -> Swift.Void)
+  final public func getBodySummary(date: Foundation.Date, completion: @escaping (Swift.Result<RookWatchSDK.RookBodyData, Swift.Error>) -> Swift.Void)
+  final public func getUserInformation(date: Foundation.Date, completion: @escaping (Swift.Result<RookWatchSDK.RookUserInfoData, Swift.Error>) -> Swift.Void)
+  final public func getLastExtractionDate(of summary: RookWatchSDK.RookDataType) -> Foundation.Date?
+  final public func getUserTimeZone(completion: @escaping (Swift.Result<RookWatchSDK.UserTimeZone, Swift.Error>) -> Swift.Void)
+  @objc deinit
+}
+public struct RookOxygenationEvent : Swift.Codable {
+  public var metadata: RookWatchSDK.RookMetaDataEvent
+  public var oxygenationData: RookWatchSDK.RookOxygenationDataEvent
+  public var dataEvent: Foundation.Data? {
+    get
+  }
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct RookOxygenationDataEvent : Swift.Codable {
+  public let saturationAvgPercentage: Swift.Int?
+  public let saturationGranularDataPercentage: [RookWatchSDK.SaturationGranularDataPercentage]?
+  public let vo2MaxMlPerMinPerKg: Swift.Int?
+  public let vo2GranularDataLiterPerMin: [RookWatchSDK.Vo2GranularDataLiterPerMin]?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct JSONParameterEncoder : RookWatchSDK.ParameterEncoder {
+  public static func encode(urlRequest: inout Foundation.URLRequest, with parameters: RookWatchSDK.Parameters) throws
+}
+public enum TimeZoneErrors : Swift.String, Swift.Error {
+  case timeZoneNotAvailable
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+extension RookWatchSDK.TimeZoneErrors : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc public class ExtractionIOSClass : ObjectiveC.NSObject {
+  @objc public static var shared: RookWatchSDK.ExtractionIOSClass
+  @objc public func test()
+  @objc public func diableTest()
+  @objc deinit
+}
+public enum RookUsersEnvironment {
+  case sandbox
+  case production
+  public static func == (a: RookWatchSDK.RookUsersEnvironment, b: RookWatchSDK.RookUsersEnvironment) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public typealias NetworkRouterCompletion = (_ data: Foundation.Data?, _ response: Foundation.URLResponse?, _ error: Swift.Error?) -> Swift.Void
+@_hasMissingDesignatedInitializers @objc public class RookExtractionStressDataObjc : ObjectiveC.NSObject, Swift.Encodable {
+  @objc final public let stressAtRESTDurationSeconds: Swift.Int
+  @objc final public let stressDurationSeconds: Swift.Int
+  @objc final public let lowStressDurationSeconds: Swift.Int
+  @objc final public let mediumStressDurationSeconds: Swift.Int
+  @objc final public let highStressDurationSeconds: Swift.Int
+  @objc final public let tssGranularDataFrom1To500ScoreNumber: [RookWatchSDK.RookExtractionTssGranularDataFrom1To500ScoreNumberObjc]?
+  @objc final public let stressAvgLevelNumber: Swift.Int
+  @objc final public let stressMaxLevelNumber: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionTssGranularDataFrom1To500ScoreNumberObjc : ObjectiveC.NSObject, Swift.Encodable {
+  @objc final public let datetime: Foundation.Date
+  @objc final public let intervalDurationSeconds: Swift.Int
+  @objc final public let tss1To500Score: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+}
+public struct RookSpeedGranularItem : Swift.Encodable {
+  public let datetime: Foundation.Date
+  public let intervalDurationSeconds: Swift.Int
+  public let speedMetersPerSecond: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+}
+public struct RookTemperatureExtractionItem : Swift.Codable {
+  public let temperatureCelsius: Swift.Int
+  public let measurementType: Swift.String
+  public init(temperatureCelsius: Swift.Int, measurementType: Swift.String)
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc public class TransmissionIOSClass : ObjectiveC.NSObject {
+  @objc public static var shared: RookWatchSDK.TransmissionIOSClass
+  @objc public func test()
+  @objc public func diableTest()
+  @objc deinit
+}
+public struct RookLapGranularItem : Swift.Encodable {
+  public let datetime: Foundation.Date
+  public let intervalDurationSeconds: Swift.Int
+  public let laps: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+}
+public struct RookPositionData : Swift.Encodable {
+  public let positionStartLatLngDeg: RookWatchSDK.RookPositionItem?
+  public let positionCentroidLatLngDeg: RookWatchSDK.RookPositionItem?
+  public let positionEndLatLngDeg: RookWatchSDK.RookPositionItem?
+  public let positionGranularDataLatLngDeg: [RookWatchSDK.RookPositionGranularItem]?
+  public let positionPolylineMapDataSummaryString: Swift.String?
+  public func encode(to encoder: Swift.Encoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionOxygenationDataObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc final public let saturationAvgPercentage: Swift.Int
+  @objc final public let saturationGranularDataPercentage: [RookWatchSDK.RookExtractionSaturationGranularDataPercentageObjc]?
+  @objc final public let vo2MaxMlPerMinPerKg: Swift.Int
+  @objc final public let vo2GranularDataLiterPerMin: [RookWatchSDK.RookExtractionVo2GranularDataLiterPerMinObjc]?
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+public struct RookCalories {
+  public let activeCalories: Swift.Int
+  public let basalCalories: Swift.Int
+  public let totalCalories: Swift.Int
+}
+public struct RookHeartRateEvent : Swift.Codable {
+  public var metadata: RookWatchSDK.RookMetaDataEvent
+  public var heartRateData: RookWatchSDK.RookHeartRateDataEvent
+  public var dataEvent: Foundation.Data? {
+    get
+  }
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct RookHeartRateDataEvent : Swift.Codable {
+  public let hrMaxBPM: Swift.Int?, hrMinimumBPM: Swift.Int?, hrAvgBPM: Swift.Int?, hrRestingBPM: Swift.Int?
+  public let hrGranularDataBPM: [RookWatchSDK.HrGranularDataBPM]?
+  public let hrvAvgRmssdNumber: Swift.Int?, hrvAvgSdnnNumber: Swift.Int?
+  public let hrvSdnnGranularData: [RookWatchSDK.HrvSdnnGranularDatum]?
+  public let hrvRmssdGranularData: [RookWatchSDK.HrvRmssdGranularDatum]?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc public class UsersIOSClass : ObjectiveC.NSObject {
+  @objc public static var shared: RookWatchSDK.UsersIOSClass
+  @objc public func test()
+  @objc public func diableTest()
+  @objc deinit
+}
+public enum RookExtractionEnvironment {
+  case sandbox
+  case production
+  public static func == (a: RookWatchSDK.RookExtractionEnvironment, b: RookWatchSDK.RookExtractionEnvironment) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum LastSummaryDateSyncType : Swift.String {
+  case sleep
+  case physical
+  case body
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionActivityDataEventObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc final public let activityStartTimeDateTime: Foundation.Date
+  @objc final public let activityEndTimeDateTime: Foundation.Date
+  @objc final public let activityDurationSeconds: Swift.Int
+  @objc final public let activityTypeName: Swift.String
+  @objc final public let activeSeconds: Swift.Int
+  @objc final public let restSeconds: Swift.Int
+  @objc final public let lowIntensitySeconds: Swift.Int
+  @objc final public let moderateIntensitySeconds: Swift.Int
+  @objc final public let vigorousIntensitySeconds: Swift.Int
+  @objc final public let inactivitySeconds: Swift.Int
+  @objc final public let activityLevelGranularDataNumber: [RookWatchSDK.RookExtractionActivityLevelGranularObjc]
+  @objc final public let continuousInactivePeriodsNumber: Swift.Int
+  @objc final public let activityStrainLevelNumber: Swift.Int
+  @objc final public let activityWorkKilojoules: Swift.Int
+  @objc final public let activityEnergyKilojoules: Swift.Int
+  @objc final public let activityEnergyPlannedKilojoules: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionActivityLevelGranularObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc final public let dateTime: Foundation.Date
+  @objc final public let activityLevel: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_inheritsConvenienceInitializers @objc final public class RookExtractionEventManagerObjc : ObjectiveC.NSObject {
+  @objc override dynamic public init()
+  @objc final public func getPhysicalHeartRateEvents(date: Foundation.Date, completion: @escaping ([RookWatchSDK.RookExtractionHeartRateEventObjc]?, Swift.Error?) -> Swift.Void)
+  @objc final public func getBodyHeartRateEvents(date: Foundation.Date, completion: @escaping ([RookWatchSDK.RookExtractionHeartRateEventObjc]?, Swift.Error?) -> Swift.Void)
+  @objc final public func getPhysicalOxygenationEvents(date: Foundation.Date, completion: @escaping ([RookWatchSDK.RookExtractionOxygenationEventObjc]?, Swift.Error?) -> Swift.Void)
+  @objc final public func getBodyOxygenationEvents(date: Foundation.Date, completion: @escaping ([RookWatchSDK.RookExtractionOxygenationEventObjc]?, Swift.Error?) -> Swift.Void)
+  @objc final public func getActivityEvents(date: Foundation.Date, completion: @escaping ([RookWatchSDK.RookExtractionActivityEventObjc]?, Swift.Error?) -> Swift.Void)
+  @objc final public func getLastExtractionDateOfActivityEvents() -> Foundation.Date?
+  @objc final public func getLastExtractionDateOfBodyHeartRateEvents() -> Foundation.Date?
+  @objc final public func getLastExtractionDateOfPhysicalHeartRateEvents() -> Foundation.Date?
+  @objc final public func getLastExtractionDateOfBodyOxygenationEvents() -> Foundation.Date?
+  @objc final public func getLastExtractionDateOfPhysicalOxygenationEvents() -> Foundation.Date?
+  @objc deinit
+}
+public struct RookActivityEvent : Swift.Encodable {
+  public var metadata: RookWatchSDK.RookMetaDataEvent
+  public var activityData: RookWatchSDK.RookActivityDataEvent?
+  public var caloriesData: RookWatchSDK.RookCaloriesDataEvent?
+  public var distanceData: RookWatchSDK.RookDistanceData?
+  public var heartRateData: RookWatchSDK.HeartRateData?
+  public var movementData: RookWatchSDK.RookMovementData?
+  public var powerData: RookWatchSDK.RookPowerData?
+  public var positionData: RookWatchSDK.RookPositionData?
+  public var oxygenationData: RookWatchSDK.OxygenationData?
+  public var stressData: RookWatchSDK.StressData?
+  public var eventData: Foundation.Data? {
+    get
+  }
+  public func encode(to encoder: Swift.Encoder) throws
+}
+public enum NetworkResponse : Swift.String {
+  case succes
+  case authenticationError
+  case badRequest
+  case outdated
+  case failed
+  case noData
+  case unableToDecode
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+extension RookWatchSDK.RookExtractionEventManagerObjc {
+  @objc final public func getPhysicalHeartRateEventsDictionary(date: Foundation.Date, completion: @escaping ([[Swift.String : Any]]?, Swift.Error?) -> Swift.Void)
+  @objc final public func getBodyHeartRateEventsDictionary(date: Foundation.Date, completion: @escaping ([[Swift.String : Any]]?, Swift.Error?) -> Swift.Void)
+  @objc final public func getPhysicalOxygenationEventsDictionary(date: Foundation.Date, completion: @escaping ([[Swift.String : Any]]?, Swift.Error?) -> Swift.Void)
+  @objc final public func getBodyOxygenationEventsDictionary(date: Foundation.Date, completion: @escaping ([[Swift.String : Any]]?, Swift.Error?) -> Swift.Void)
+  @objc final public func getActivityEventsDictionary(date: Foundation.Date, completion: @escaping ([[Swift.String : Any]]?, Swift.Error?) -> Swift.Void)
+}
+public enum RookTransmissionEnvironment {
+  case sandbox
+  case production
+  public static func == (a: RookWatchSDK.RookTransmissionEnvironment, b: RookWatchSDK.RookTransmissionEnvironment) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum RookError : Swift.String, Swift.Error {
+  case SDKUnavailable
+  case emptySamples
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+extension RookWatchSDK.RookError : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+public struct RookPhysicalData : Swift.Codable {
+  public let dataStructure: Swift.String
+  public let version: Swift.Int
+  public let summaries: RookWatchSDK.RookPhysicalSummaries
+  public func getDictionary() -> [Swift.String : Any]
+  public func getData() -> Foundation.Data?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct RookPhysicalSummaries : Swift.Codable {
+  public let dailyActivityRelatedData: RookWatchSDK.DailyActivityRelatedData
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct DailyActivityRelatedData : Swift.Codable {
+  public let metadata: RookWatchSDK.RookPhysicalMetadata
+  public let distanceData: RookWatchSDK.DistanceData
+  public let oxygenationData: RookWatchSDK.OxygenationData
+  public let activityData: RookWatchSDK.ActivityData
+  public let caloriesData: RookWatchSDK.CaloriesData
+  public let heartRateData: RookWatchSDK.HeartRateData
+  public let stressData: RookWatchSDK.StressData
+  public let nonStructuredData: RookWatchSDK.NonStructuredData?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct RookPhysicalMetadata : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let userID: Swift.String?
+  public let sourcesOfData: [Swift.String]
+  public let physicalHealthScore: Swift.Int?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct ActivityData : Swift.Codable {
+  public let activeSeconds: Swift.Int?
+  public let restSeconds: Swift.Int?
+  public let lowIntensitySeconds: Swift.Int?
+  public let moderateIntensitySeconds: Swift.Int?
+  public let vigorousIntensitySeconds: Swift.Int?, inactivitySeconds: Swift.Int?
+  public let activityLevelGranularDataNumber: [RookWatchSDK.ActivityLevelGranularDataNumber]?
+  public let continuousInactivePeriodsNumber: Swift.Int?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct ActivityLevelGranularDataNumber : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let activityLevel: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct CaloriesData : Swift.Codable {
+  public let caloriesNetIntakeKilocalories: Swift.Int?
+  public let caloriesExpenditureKilocalories: Swift.Int?
+  public let caloriesNetActiveKilocalories: Swift.Int?
+  public let caloriesBasalMetabolicRateKilocalories: Swift.Int?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct DistanceData : Swift.Codable {
+  public var stepsPerDayNumber: Swift.Int?
+  public var stepsGranularDataStepsPerHr: [RookWatchSDK.StepsGranularDataStepsPerHr]?
+  public var activeStepsPerDayNumber: Swift.Int?
+  public var activeStepsGranularDataStepsPerHr: [RookWatchSDK.StepsGranularDataStepsPerHr]?
+  public var walkedDistanceMeters: Swift.Int?, traveledDistanceMeters: Swift.Int?
+  public var traveledDistanceGranularDataMeters: [RookWatchSDK.TraveledDistanceGranularDataMeter]?
+  public var floorsClimbedNumber: Swift.Int?
+  public var floorsClimbedGranularDataFloors: [RookWatchSDK.FloorsClimbedGranularDataFloor]?
+  public var elevationAvgAltitudeMeters: Swift.Int?, elevationMinimumAltitudeMeters: Swift.Int?, elevationMaxAltitudeMeters: Swift.Int?, elevationLossActualAltitudeMeters: Swift.Int?
+  public var elevationGainActualAltitudeMeters: Swift.Int?, elevationPlannedGainMeters: Swift.Int?
+  public var elevationGranularDataMeters: [RookWatchSDK.ElevationGranularDataMeter]?
+  public var swimmingStrokesNumber: Swift.Int?, swimmingNumLapsNumber: Swift.Int?, swimmingPoolLengthMeters: Swift.Int?, swimmingTotalDistanceMeters: Swift.Int?
+  public var swimmingDistanceGranularDataMeters: [RookWatchSDK.SwimmingDistanceGranularDataMeter]?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct StepsGranularDataStepsPerHr : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let intervalDurationSeconds: Swift.Int, steps: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct ElevationGranularDataMeter : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let intervalDurationSeconds: Swift.Int, elevationChange: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct FloorsClimbedGranularDataFloor : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let intervalDurationSeconds: Swift.Int, floorsClimbed: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct SwimmingDistanceGranularDataMeter : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let intervalDurationSeconds: Swift.Int, swimmingDistanceMeters: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct TraveledDistanceGranularDataMeter : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let intervalDurationSeconds: Swift.Int, traveledDistanceMeters: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct HeartRateData : Swift.Codable {
+  public var hrMaxBPM: Swift.Int?, hrMinimumBPM: Swift.Int?, hrAvgBPM: Swift.Int?, hrRestingBPM: Swift.Int?
+  public var hrGranularDataBPM: [RookWatchSDK.HrGranularDataBPM]?
+  public var hrvAvgRmssdNumber: Swift.Int?, hrvAvgSdnnNumber: Swift.Int?
+  public var hrvSdnnGranularDataNumber: [RookWatchSDK.HrvSdnnGranularDataNumber]?
+  public var hrvRmssdGranularDataNumber: [RookWatchSDK.HrvRmssdGranularDataNumber]?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct HrvRmssdGranularDataNumber : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let hrvRmssd: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct HrvSdnnGranularDataNumber : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let hrvSdnn: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct NonStructuredData : Swift.Codable {
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct OxygenationData : Swift.Codable {
+  public let saturationAvgPercentage: Swift.Int?
+  public let saturationGranularDataPercentage: [RookWatchSDK.SaturationGranularDataPercentage]?
+  public let vo2MaxMlPerMinPerKg: Swift.Int?
+  public let vo2GranularDataLiterPerMin: [RookWatchSDK.Vo2GranularDataLiterPerMin]?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct Vo2GranularDataLiterPerMin : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let vo2MlPerMinPerKg: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct StressData : Swift.Codable {
+  public let stressAtRESTDurationSeconds: Swift.Int?
+  public let stressDurationSeconds: Swift.Int?
+  public let lowStressDurationSeconds: Swift.Int?
+  public let mediumStressDurationSeconds: Swift.Int?
+  public let highStressDurationSeconds: Swift.Int?
+  public let stressGranularDataScoreNumber: [RookWatchSDK.StressGranularDataScoreNumber]?
+  public let stressAvgLevelNumber: Swift.Int?
+  public let stressMaxLevelNumber: Swift.Int?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct StressGranularDataScoreNumber : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let stressScore: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public class SyncSummaryManager {
+  public init()
+  public func syncSleepSummary(from date: Foundation.Date, completion: @escaping (Swift.Result<Swift.Bool, Swift.Error>) -> Swift.Void)
+  public func syncPhysicalSummary(from date: Foundation.Date, completion: @escaping (Swift.Result<Swift.Bool, Swift.Error>) -> Swift.Void)
+  public func syncBodySummary(from date: Foundation.Date, completion: @escaping (Swift.Result<Swift.Bool, Swift.Error>) -> Swift.Void)
+  public func getSummaryLastDateSync(of type: RookWatchSDK.LastSummaryDateSyncType, completion: @escaping (Swift.Result<Foundation.Date, Swift.Error>) -> Swift.Void)
+  @objc deinit
+}
+public enum ExtractionErrors : Swift.String, Swift.Error {
+  case sleepDataEmpty
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+extension RookWatchSDK.ExtractionErrors : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+public struct RookCaloriesDataEvent : Swift.Encodable {
+  public let caloriesNetIntakeKilocalories: Swift.Int?
+  public let caloriesExpenditureKilocalories: Swift.Int?
+  public let caloriesNetActiveKilocalories: Swift.Int?
+  public let caloriesBasalMetabolicRateKilocalories: Swift.Int?
+  public let fatPercentageOfCaloriesPercentage: Swift.Int?
+  public let carbohydratePercentageOfCaloriesPercentage: Swift.Int?
+  public let proteinPercentageOfCaloriesPercentage: Swift.Int?
+  public func encode(to encoder: Swift.Encoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionPositionDataObjc : ObjectiveC.NSObject, Swift.Encodable {
+  @objc final public let positionStartLatLngDeg: RookWatchSDK.RookExtractionPositionItemObjc?
+  @objc final public let positionCentroidLatLngDeg: RookWatchSDK.RookExtractionPositionItemObjc?
+  @objc final public let positionEndLatLngDeg: RookWatchSDK.RookExtractionPositionItemObjc?
+  @objc final public let positionGranularDataLatLngDeg: [RookWatchSDK.RookExtractionPositionGranularItemObjc]?
+  @objc final public let positionPolylineMapDataSummaryString: Swift.String?
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionPositionItemObjc : ObjectiveC.NSObject, Swift.Encodable {
+  @objc final public let latitude: Swift.Double
+  @objc final public let longitude: Swift.Double
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionPositionGranularItemObjc : ObjectiveC.NSObject, Swift.Encodable {
+  @objc final public let datetime: Foundation.Date
+  @objc final public let intervalDurationSeconds: Swift.Int
+  @objc final public let latitude: Swift.Double
+  @objc final public let longitude: Swift.Double
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+}
+public typealias Parameters = [Swift.String : Any]
+public protocol ParameterEncoder {
+  static func encode(urlRequest: inout Foundation.URLRequest, with parameters: RookWatchSDK.Parameters) throws
+}
+public enum NetworkError : Swift.String, Swift.Error {
+  case parametersNil
+  case encodingFailed
+  case missingUrl
+  case noData
+  case NotAuthorizedError
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+extension RookWatchSDK.NetworkError : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+public struct RookTorqueGranularItem : Swift.Encodable {
+  public let datetime: Foundation.Date
+  public let intervalDurationSeconds: Swift.Int
+  public let torqueNewtonMeters: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+}
+public struct RookPositionGranularItem : Swift.Encodable {
+  public let datetime: Foundation.Date
+  public let intervalDurationSeconds: Swift.Int
+  public let latitude: Swift.Double
+  public let longitude: Swift.Double
+  public func encode(to encoder: Swift.Encoder) throws
+}
+public struct RookVelocityVectorItem : Swift.Encodable {
+  public let speedMetersPerSecond: Swift.Int
+  public let direction: Swift.String
+  public func encode(to encoder: Swift.Encoder) throws
+}
+extension RookWatchSDK.RookExtractionManager {
+  @objc final public func getSleepSummaryObjc(date: Foundation.Date, completion: @escaping ([Swift.String : Any]?, Swift.Error?) -> Swift.Void)
+  @objc final public func getPhysicalSummaryObjc(date: Foundation.Date, completion: @escaping ([Swift.String : Any]?, Swift.Error?) -> Swift.Void)
+  @objc final public func getBodySummaryObjc(date: Foundation.Date, completion: @escaping ([Swift.String : Any]?, Swift.Error?) -> Swift.Void)
+  @objc final public func getLastExtractionDateOfSleep() -> Foundation.Date?
+  @objc final public func getLastExtractionDateOfPhysical() -> Foundation.Date?
+  @objc final public func getLastExtractionDateOfBody() -> Foundation.Date?
+  @objc final public func getUserTimeZone(completion: @escaping ([Swift.String : Any]?, Swift.Error?) -> Swift.Void)
+}
+public enum RookDataType : Swift.String {
+  case sleepSummary
+  case physicalSummary
+  case bodySummary
+  case userInformation
+  case heartRateBodyEvent
+  case heartRatePhysicalEvent
+  case oxygenationBodyEvent
+  case oxygenationPhysicalEvent
+  case activityEvent
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionDistanceDataObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc public var stepsNumber: Swift.Int
+  @objc public var stepsGranularDataStepsPerMin: [RookWatchSDK.RookExtractionStepsGranularDataStepsPerHrObjc]?
+  @objc public var walkedDistanceMeters: Swift.Int, traveledDistanceMeters: Swift.Int
+  @objc public var traveledDistanceGranularDataMeters: [RookWatchSDK.RookExtractionTraveledDistanceGranularDataMeterObjc]?
+  @objc public var floorsClimbedNumber: Swift.Int
+  @objc public var floorsClimbedGranularDataFloors: [RookWatchSDK.RookExtractionFloorsClimbedGranularDataFloorObjc]?
+  @objc public var elevationAvgAltitudeMeters: Swift.Int, elevationMinimumAltitudeMeters: Swift.Int, elevationMaxAltitudeMeters: Swift.Int, elevationLossActualAltitudeMeters: Swift.Int
+  @objc public var elevationGainActualAltitudeMeters: Swift.Int, elevationPlannedGainMeters: Swift.Int
+  @objc public var elevationGranularDataMeters: [RookWatchSDK.RookExtractionElevationGranularDataMeterObjc]?
+  @objc public var swimmingStrokesNumber: Swift.Int, swimmingNumLapsNumber: Swift.Int, swimmingPoolLengthMeters: Swift.Int, swimmingTotalDistanceMeters: Swift.Int
+  @objc public var swimmingDistanceGranularDataMeters: [RookWatchSDK.RookExtractionSwimmingDistanceGranularDataMeterObjc]?
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionStepsGranularDataStepsPerHrObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc final public let datetime: Foundation.Date
+  @objc final public let intervalDurationSeconds: Swift.Int, steps: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionTraveledDistanceGranularDataMeterObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc final public let datetime: Foundation.Date
+  @objc final public let intervalDurationSeconds: Swift.Int, traveledDistanceMeters: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionFloorsClimbedGranularDataFloorObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc final public let datetime: Foundation.Date
+  @objc final public let intervalDurationSeconds: Swift.Int, floorsClimbed: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionElevationGranularDataMeterObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc final public let datetime: Foundation.Date
+  @objc final public let intervalDurationSeconds: Swift.Int, elevationChange: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionSwimmingDistanceGranularDataMeterObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc final public let datetime: Foundation.Date
+  @objc final public let intervalDurationSeconds: Swift.Int, swimmingDistanceMeters: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionActivityEventObjc : ObjectiveC.NSObject, Swift.Encodable {
+  @objc final public let metadata: RookWatchSDK.RookExtractionMetaDataEventObjc
+  @objc final public let activityData: RookWatchSDK.RookExtractionActivityDataEventObjc?
+  @objc final public let caloriesData: RookWatchSDK.RookExtractionCaloriesDataEventObjc?
+  @objc final public let distanceData: RookWatchSDK.RookExtractionDistanceDataObjc?
+  @objc final public let heartRateData: RookWatchSDK.RookExtractionHeartRateDataObjc?
+  @objc final public let movementData: RookWatchSDK.RookExtractionMovementDataObjc?
+  @objc final public let powerData: RookWatchSDK.RookExtractionPowerDataObjc?
+  @objc final public let positionData: RookWatchSDK.RookExtractionPositionDataObjc?
+  @objc final public let oxygenationData: RookWatchSDK.RookExtractionOxygenationDataObjc?
+  @objc final public let stressData: RookWatchSDK.RookExtractionStressDataObjc?
+  public var eventData: Foundation.Data? {
+    get
+  }
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+}
+public struct UserTimeZone : Swift.Encodable {
+  public let timeZone: Swift.String
+  public let offset: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+}
+public class SyncEventsManager {
+  public init()
+  public func syncBodyHeartRateEvent(date: Foundation.Date, completion: @escaping (Swift.Result<Swift.Bool, Swift.Error>) -> Swift.Void)
+  public func syncPhysicalHeartRateEvent(date: Foundation.Date, completion: @escaping (Swift.Result<Swift.Bool, Swift.Error>) -> Swift.Void)
+  public func syncBodyOxygenationEvent(date: Foundation.Date, completion: @escaping (Swift.Result<Swift.Bool, Swift.Error>) -> Swift.Void)
+  public func syncPhysicalOxygenationEvent(date: Foundation.Date, completion: @escaping (Swift.Result<Swift.Bool, Swift.Error>) -> Swift.Void)
+  public func syncTrainingEvent(date: Foundation.Date, completion: @escaping (Swift.Result<Swift.Bool, Swift.Error>) -> Swift.Void)
+  public func getEventLastDateSync(of type: RookWatchSDK.LastEventDataSyncType, completion: @escaping (Swift.Result<Foundation.Date, Swift.Error>) -> Swift.Void)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc public class RookPermissionExtraction : ObjectiveC.NSObject {
+  @objc override dynamic public init()
+  public func requestAllPermissions(completion: @escaping (Swift.Result<Swift.Bool, Swift.Error>) -> Swift.Void)
+  public func requestSleepPermissions(completion: @escaping (Swift.Result<Swift.Bool, Swift.Error>) -> Swift.Void)
+  public func requestUserInfoPermissions(completion: @escaping (Swift.Result<Swift.Bool, Swift.Error>) -> Swift.Void)
+  public func requestPhysicalPermissions(completion: @escaping (Swift.Result<Swift.Bool, Swift.Error>) -> Swift.Void)
+  public func requestBodyPermissions(completion: @escaping (Swift.Result<Swift.Bool, Swift.Error>) -> Swift.Void)
+  @objc public func requestAllPermissionsObjc(completion: @escaping (Swift.Bool, Swift.Error?) -> Swift.Void)
+  @objc public func requestSleepPermissionsObjc(completion: @escaping (Swift.Bool, Swift.Error?) -> Swift.Void)
+  @objc public func requestPhysicalPermissionsObjc(completion: @escaping (Swift.Bool, Swift.Error?) -> Swift.Void)
+  @objc public func requestBodyPermissionsObjc(completion: @escaping (Swift.Bool, Swift.Error?) -> Swift.Void)
+  @objc deinit
+}
+final public class RookTimeZoneManager {
+  public init()
+  final public func uploadUserTimeZone(timezone: Swift.String, offset: Swift.Int, completion: @escaping (Swift.Result<Swift.Bool, Swift.Error>) -> Swift.Void)
+  @objc deinit
+}
+public struct RookPowerData : Swift.Encodable {
+  public let powerAvgWattsNumber: Swift.Int
+  public let powerMaxWattsNumber: Swift.Int
+  public let powerGranularDataWattsNumber: [RookWatchSDK.RookPowerGranularItem]
+  public func encode(to encoder: Swift.Encoder) throws
+}
+public struct RookPowerGranularItem : Swift.Encodable {
+  public let datetime: Foundation.Date
+  public let intervalDurationSeconds: Swift.Int
+  public let powerWatts: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionCaloriesDataEventObjc : ObjectiveC.NSObject, Swift.Encodable {
+  @objc final public let caloriesNetIntakeKilocalories: Swift.Int
+  @objc final public let caloriesExpenditureKilocalories: Swift.Int
+  @objc final public let caloriesNetActiveKilocalories: Swift.Int
+  @objc final public let caloriesBasalMetabolicRateKilocalories: Swift.Int
+  @objc final public let fatPercentageOfCaloriesPercentage: Swift.Int
+  @objc final public let carbohydratePercentageOfCaloriesPercentage: Swift.Int
+  @objc final public let proteinPercentageOfCaloriesPercentage: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+}
+public enum AnalyticPlatform {
+  case ios
+  case flutter
+  case reactNative
+  public static func == (a: RookWatchSDK.AnalyticPlatform, b: RookWatchSDK.AnalyticPlatform) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc final public class AnalyticsExtractionConfigurator : ObjectiveC.NSObject {
+  @objc public static let shared: RookWatchSDK.AnalyticsExtractionConfigurator
+  final public func setPlatform(_ platform: RookWatchSDK.AnalyticPlatform)
+  @objc final public func setPlatformToReact()
+  @objc deinit
+}
+public struct RookBodyData : Swift.Codable {
+  public let dataStructure: Swift.String
+  public let version: Swift.Int
+  public let summaries: RookWatchSDK.RookBodySummaries
+  public func getDictionary() -> [Swift.String : Any]
+  public func getData() -> Foundation.Data?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct RookBodySummaries : Swift.Codable {
+  public let bodyData: RookWatchSDK.BodyData
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct BodyData : Swift.Codable {
+  public let metadata: RookWatchSDK.RookBodyMetadata
+  public let body: RookWatchSDK.Body
+  public let bloodGlucose: RookWatchSDK.BloodGlucose
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct RookBodyMetadata : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let userID: Swift.String?
+  public let sourcesOfData: [Swift.String]
+  public let bodyHealthScore: Swift.Int?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct BloodGlucose : Swift.Codable {
+  public let bloodGlucoseDayAvgMgPerDLNumber: Swift.Int?
+  public let bloodGlucoseGranularDataMgPerDL: [RookWatchSDK.BloodGlucoseGranularDataMgPerDL]?
+  public let bloodPressure: RookWatchSDK.BloodPressure
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct BloodGlucoseGranularDataMgPerDL : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let bloodGlucoseMgPerDL: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct BloodPressure : Swift.Codable {
+  public let bloodPressureDayAvgSystolicDiastolicBpNumber: [RookWatchSDK.BloodPressureSystolicDiastolicBpNumber]?
+  public let bloodPressureGranularDataSystolicDiastolicBpNumber: [RookWatchSDK.BloodPressureGranularDataSystolicDiastolicBpNumber]?
+  public let hydration: RookWatchSDK.Hydration
+  public let heartRateData: RookWatchSDK.HeartRateData
+  public let mood: RookWatchSDK.Mood
+  public let nutrition: RookWatchSDK.Nutrition
+  public let oxygenationData: RookWatchSDK.OxygenationData
+  public let temperatureRelatedData: RookWatchSDK.TemperatureRelatedData
+  public let nonStructuredData: RookWatchSDK.NonStructuredData?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct BloodPressureSystolicDiastolicBpNumber : Swift.Codable {
+  public let systolicBp: Swift.Int, diastolicBp: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct BloodPressureGranularDataSystolicDiastolicBpNumber : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let systolicBp: Swift.Int, diastolicBp: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct Hydration : Swift.Codable {
+  public let waterTotalConsumptionMlNumber: Swift.Int?
+  public let hydrationAmountGranularDataMlNumber: [RookWatchSDK.HydrationAmountGranularDataMlNumber]?
+  public let hydrationLevelGranularDataPercentageNumber: [RookWatchSDK.HydrationLevelGranularDataPercentageNumber]?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct HydrationAmountGranularDataMlNumber : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let intervalDurationSeconds: Swift.Int, hydrationAmountMl: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct HydrationLevelGranularDataPercentageNumber : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let intervalDurationSeconds: Swift.Int, hydrationLevelPercentage: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct Mood : Swift.Codable {
+  public let moodMinimumScale: Swift.Int?, moodAvgScale: Swift.Int?, moodMaxScale: Swift.Int?
+  public let moodGranularDataScale: [RookWatchSDK.MoodGranularDataScale]?
+  public let moodDeltaScale: Swift.Int?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct MoodGranularDataScale : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let intervalDurationSeconds: Swift.Int, moodScale: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct Nutrition : Swift.Codable {
+  public let foodIntakeNumber: Swift.Int?
+  public let caloriesIntakeNumber: Swift.Int?, proteinIntakeGNumber: Swift.Int?, sugarIntakeGNumber: Swift.Int?, fatIntakeGNumber: Swift.Int?
+  public let transFatIntakeGNumber: Swift.Int?, carbohydratesIntakeGNumber: Swift.Int?, fiberIntakeGNumber: Swift.Int?, alcoholIntakeGNumber: Swift.Int?
+  public let sodiumIntakeMgNumber: Swift.Int?, cholesterolIntakeMgNumber: Swift.Int?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct FoodIntakeNumber : Swift.Codable {
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct Body : Swift.Codable {
+  public let waistCircumferenceCMNumber: Swift.Int?
+  public let hipCircumferenceCMNumber: Swift.Int?
+  public let chestCircumferenceCMNumber: Swift.Int?
+  public let boneCompositionPercentageNumber: Swift.Int?
+  public let muscleCompositionPercentageNumber: Swift.Int?
+  public let waterCompositionPercentage: Swift.Int?
+  public let weightKgNumber: Swift.Int?
+  public let heightCMNumber: Swift.Int?
+  public let bmiNumber: Swift.Int?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+final public class RookUsersManger {
+  public init()
+  final public func registerRookUser(with id: Swift.String, completion: @escaping (Swift.Result<Swift.Bool, Swift.Error>) -> Swift.Void)
+  final public func getUserIdStored(completion: @escaping (Swift.Result<Swift.String, Swift.Error>) -> Swift.Void)
+  final public func removeUser(completion: @escaping (Swift.Result<Swift.Bool, Swift.Error>) -> Swift.Void)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc final public class IOSClass : ObjectiveC.NSObject {
+  @objc public static let shared: RookWatchSDK.IOSClass
+  @objc final public func test()
+  @objc final public func disableTest()
+  @objc deinit
+}
+public enum HTTPMethod : Swift.String {
+  case get
+  case post
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct RookActivityDataEvent : Swift.Encodable {
+  public let activityStartTimeDateTime: Foundation.Date
+  public let activityEndTimeDateTime: Foundation.Date
+  public let activityDurationSeconds: Swift.Int?
+  public let activityTypeName: Swift.String?
+  public let activeSeconds: Swift.Int?
+  public let restSeconds: Swift.Int?
+  public let lowIntensitySeconds: Swift.Int?
+  public let moderateIntensitySeconds: Swift.Int?
+  public let vigorousIntensitySeconds: Swift.Int?
+  public let inactivitySeconds: Swift.Int?
+  public let activityLevelGranularDataNumber: [RookWatchSDK.RookActivityLevelGranular]?
+  public let continuousInactivePeriodsNumber: Swift.Int?
+  public let activityStrainLevelNumber: Swift.Int?
+  public let activityWorkKilojoules: Swift.Int?
+  public let activityEnergyKilojoules: Swift.Int?
+  public let activityEnergyPlannedKilojoules: Swift.Int?
+  public func encode(to encoder: Swift.Encoder) throws
+}
+public typealias HTTPHeaders = [Swift.String : Swift.String]
+public enum HTTPTask {
+  case request
+  case requestParameters(bodyParameters: RookWatchSDK.Parameters?, urlParameters: RookWatchSDK.Parameters?)
+  case requestParametersAndHeaders(bodyParameters: RookWatchSDK.Parameters?, urlParameters: RookWatchSDK.Parameters?, additionalHeaders: RookWatchSDK.HTTPHeaders?)
+}
+public enum SleepEvent : Swift.String {
+  case aSleep
+  case inBed
+  case aWake
+  case asleepREM
+  case asleepCore
+  case asleepDeep
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum HealthDataType : Swift.String, Swift.CaseIterable, Swift.Identifiable {
+  public var id: RookWatchSDK.HealthDataType {
+    get
+  }
+  case appleExerciseTime
+  case appleStandTime
+  case basalEnergyBurned
+  case activeEnergyBurned
+  case stepCount
+  case distanceCycling
+  case distanceWalkingRunning
+  case distanceSwimming
+  case swimmingStrokeCount
+  case flightsClimbed
+  case height
+  case bodyMass
+  case waistCircumference
+  case bodyFatPercentage
+  case bodyTemperature
+  case basalBodyTemperature
+  case appleSleepingWristTemperature
+  case heartRate
+  case restingHeartRate
+  case walkingHeartRateAverage
+  case heartRateVariabilitySDNN
+  case workout
+  case sleepAnalysis
+  case vo2Max
+  case oxygenSaturation
+  case respiratoryRate
+  case biologicalSex
+  case dateOfBirth
+  case bloodPressureSystolic
+  case bloodPressureDiastolic
+  case bloodGlucose
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [RookWatchSDK.HealthDataType]
+  public typealias ID = RookWatchSDK.HealthDataType
+  public typealias RawValue = Swift.String
+  public static var allCases: [RookWatchSDK.HealthDataType] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct RookTemperatureEvent : Swift.Codable {
+  public var metadata: RookWatchSDK.RookMetaDataEvent
+  public var temperatureData: RookWatchSDK.RookTemperatureData
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct RookTemperatureData : Swift.Codable {
+  public let temperatureMinimumCelsius: Swift.Int?, temperatureAvgCelsius: Swift.Int?, temperatureMaxCelsius: Swift.Int?
+  public let temperatureGranularDataCelsius: [RookWatchSDK.TemperatureGranularDataCelsius]?
+  public let temperatureDeltaCelsius: Swift.Int?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct SleepDataDuration {
+  public let start: Foundation.Date
+  public let end: Foundation.Date
+  public let duration: Swift.Int
+  public let timeInBed: Swift.Int
+  public let sleepLightDuration: Swift.Int
+  public let sleepRemDuration: Swift.Int
+  public let sleepDeepDuration: Swift.Int
+  public let sleepFallDuration: Swift.Int
+  public let sleepAwakeDuration: Swift.Int
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionHeartRateDataObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc public var hrMaxBPM: Swift.Int, hrMinimumBPM: Swift.Int, hrAvgBPM: Swift.Int, hrRestingBPM: Swift.Int
+  @objc public var hrGranularDataBPM: [RookWatchSDK.RookExtractionHrGranularDataBPMObjc]?
+  @objc public var hrvAvgRmssdNumber: Swift.Int, hrvAvgSdnnNumber: Swift.Int
+  @objc public var hrvSdnnGranularDataNumber: [RookWatchSDK.RookExtractionHrvSdnnGranularDatumObjc]?
+  @objc public var hrvRmssdGranularDataNumber: [RookWatchSDK.RookExtractionHrvRmssdGranularDatumObjc]?
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionPowerDataObjc : ObjectiveC.NSObject, Swift.Encodable {
+  @objc final public let powerAvgWattsNumber: Swift.Int
+  @objc final public let powerMaxWattsNumber: Swift.Int
+  @objc final public let powerGranularDataWattsNumber: [RookWatchSDK.RookExtractionPowerGranularItemObjc]
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionPowerGranularItemObjc : ObjectiveC.NSObject, Swift.Encodable {
+  @objc final public let datetime: Foundation.Date
+  @objc final public let intervalDurationSeconds: Swift.Int
+  @objc final public let powerWatts: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionMetaDataEventObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc public var datetime: Foundation.Date
+  @objc public var userId: Swift.String?
+  @objc public var sourceOfData: [Swift.String]
+  @objc public var wasTheUserUnderPhysicalActivity: Swift.Bool
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+public struct RookTransmissionConfiguration {
+  public let clientUUID: Swift.String
+  public let secretKey: Swift.String
+  public init(clientUUID: Swift.String, secretKey: Swift.String)
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionOxygenationEventObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc public var metadata: RookWatchSDK.RookExtractionMetaDataEventObjc
+  @objc public var oxygenationData: RookWatchSDK.RookExtractionOxigenationDataEventObjc
+  @objc public var dataEvent: Foundation.Data? {
+    @objc get
+  }
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionOxigenationDataEventObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc final public let saturationAvgPercentage: Swift.Int
+  @objc final public let saturationGranularDataPercentage: [RookWatchSDK.RookExtractionSaturationGranularDataPercentageObjc]?
+  @objc final public let vo2MaxMlPerMinPerKg: Swift.Int
+  @objc final public let vo2GranularDataLiterPerMin: [RookWatchSDK.RookExtractionVo2GranularDataLiterPerMinObjc]?
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionBreathingGranularDataBreathsPerMinObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc final public let datetime: Foundation.Date
+  @objc final public let breathsPerMin: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionSaturationGranularDataPercentageObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc final public let datetime: Foundation.Date
+  @objc final public let saturationPercentage: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionVo2GranularDataLiterPerMinObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc final public let datetime: Foundation.Date
+  @objc final public let vo2MlPerMinPerKg: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionMovementDataObjc : ObjectiveC.NSObject, Swift.Encodable {
+  @objc final public let speedNormalizedMetersPerSecond: Swift.Int
+  @objc final public let speedAvgMetersPerSecond: Swift.Int
+  @objc final public let speedMaxMetersPerSecond: Swift.Int
+  @objc final public let speedGranularDataMetersPerSecond: [RookWatchSDK.RookExtractionSpeedGranularItemObjc]?
+  @objc final public let velocityVectorAvgSpeedAndDirection: [RookWatchSDK.RookExtractionVelocityVectorItemObjc]?
+  @objc final public let velocityVectorMaxSpeedAndDirection: [RookWatchSDK.RookExtractionVelocityVectorItemObjc]?
+  @objc final public let paceAvgMinutesPerKilometer: Swift.Int
+  @objc final public let paceMaxMinutesPerKilometer: Swift.Int
+  @objc final public let cadenceAvgRpm: Swift.Int
+  @objc final public let cadenceMaxRpm: Swift.Int
+  @objc final public let cadenceGranularDataRpm: [RookWatchSDK.RookExtractionCadenceGranularItemObjc]?
+  @objc final public let torqueAvgNewtonMeters: Swift.Int
+  @objc final public let torqueMaxNewtonMeters: Swift.Int
+  @objc final public let torqueGranularDataNewtonMeters: [RookWatchSDK.RookExtractionTorqueGranularItemObjc]?
+  @objc final public let lapGranularDataLapsNumber: [RookWatchSDK.RookExtractionLapGranularItemObjc]?
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionSpeedGranularItemObjc : ObjectiveC.NSObject, Swift.Encodable {
+  @objc final public let datetime: Foundation.Date
+  @objc final public let intervalDurationSeconds: Swift.Int
+  @objc final public let speedMetersPerSecond: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionVelocityVectorItemObjc : ObjectiveC.NSObject, Swift.Encodable {
+  @objc final public let speedMetersPerSecond: Swift.Int
+  @objc final public let direction: Swift.String
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionCadenceGranularItemObjc : ObjectiveC.NSObject, Swift.Encodable {
+  @objc final public let datetime: Foundation.Date
+  @objc final public let intervalDurationSeconds: Swift.Int
+  @objc final public let cadenceRpm: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionTorqueGranularItemObjc : ObjectiveC.NSObject, Swift.Encodable {
+  @objc final public let datetime: Foundation.Date
+  @objc final public let intervalDurationSeconds: Swift.Int
+  @objc final public let torqueNewtonMeters: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionLapGranularItemObjc : ObjectiveC.NSObject, Swift.Encodable {
+  @objc final public let datetime: Foundation.Date
+  @objc final public let intervalDurationSeconds: Swift.Int
+  @objc final public let laps: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+}
+public enum RookEnvironment {
+  case sandbox
+  case production
+  public static func == (a: RookWatchSDK.RookEnvironment, b: RookWatchSDK.RookEnvironment) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct RookSleepData : Swift.Codable {
+  public let dataStructure: Swift.String
+  public let version: Swift.Int
+  public let summaries: RookWatchSDK.RookSleepSummaries
+  public func getDictionary() -> [Swift.String : Any]
+  public func getData() -> Foundation.Data?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct RookSleepSummaries : Swift.Codable {
+  public let sleepRelatedData: RookWatchSDK.SleepRelatedData
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct SleepRelatedData : Swift.Codable {
+  public let metadata: RookWatchSDK.RookSleepMetadata
+  public let sleepDurationRelatedData: RookWatchSDK.SleepDurationRelatedData
+  public let sleepScores: RookWatchSDK.SleepScores
+  public let sleepHeartRateRelatedData: RookWatchSDK.SleepHeartRateRelatedData
+  public let temperatureRelatedData: RookWatchSDK.TemperatureRelatedData
+  public let breathingRelatedData: RookWatchSDK.BreathingRelatedData
+  public let nonStructuredData: [Swift.String]?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct BreathingRelatedData : Swift.Codable {
+  public let breathsMinimumPerMin: Swift.Int?
+  public let breathsAvgPerMin: Swift.Int?
+  public let breathsMaxPerMin: Swift.Int?
+  public let breathingGranularDataBreathsPerMin: [RookWatchSDK.BreathingGranularDataBreathsPerMin]?
+  public let snoringEventsCountNumber: Swift.Int?
+  public let snoringDurationTotalSeconds: Swift.Int?
+  public let snoringGranularDataSnores: [RookWatchSDK.SnoringGranularDataSnore]?
+  public let saturationAvgPercentage: Swift.Int?
+  public let saturationMaxPercentage: Swift.Int?
+  public let saturationMiniPercentage: Swift.Int?
+  public let saturationGranularDataPercentage: [RookWatchSDK.SaturationGranularDataPercentage]?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct BreathingGranularDataBreathsPerMin : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let breathsPerMin: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct SaturationGranularDataPercentage : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let saturationPercentage: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct SnoringGranularDataSnore : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let intervalDurationSeconds: Swift.Int, snoringEventsCountNumber: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct RookSleepMetadata : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let userID: Swift.String?
+  public let sourcesOfData: [Swift.String]
+  public let sleepHealthScore: Swift.Int?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct UserDemographic : Swift.Codable {
+  public let sex: Swift.String?
+  public let gender: Swift.String?
+  public let dateOfBirth: Swift.String?
+  public let age: Swift.Int?
+  public let country: Swift.String?
+  public let state: Swift.String?
+  public let city: Swift.String?
+  public let ethnicity: Swift.String?
+  public let income: Swift.String?
+  public let maritalStatus: Swift.String?
+  public let education: Swift.String?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct SleepDurationRelatedData : Swift.Codable {
+  public let sleepStartDatetime: Foundation.Date
+  public let sleepEndDatetime: Foundation.Date
+  public let sleepDate: Foundation.Date
+  public let sleepDurationSeconds: Swift.Int
+  public let timeInBedSeconds: Swift.Int
+  public let lightSleepDurationSeconds: Swift.Int
+  public let remSleepDurationSeconds: Swift.Int
+  public let deepSleepDurationSeconds: Swift.Int
+  public let timeToFallAsleepSeconds: Swift.Int
+  public let timeAwakeDuringSleepSeconds: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct SleepHeartRateRelatedData : Swift.Codable {
+  public let hrMaxBPM: Swift.Int?, hrMinimumBPM: Swift.Int?, hrAvgBPM: Swift.Int?, hrRestingBPM: Swift.Int?
+  public let hrBasalBPM: Swift.Int?
+  public let hrGranularDataBPM: [RookWatchSDK.HrGranularDataBPM]?
+  public let hrvAvgRmssdNumber: Swift.Int?, hrvAvgSdnnNumber: Swift.Int?
+  public let hrvSdnnGranularData: [RookWatchSDK.HrvSdnnGranularDatum]?
+  public let hrvRmssdGranularData: [RookWatchSDK.HrvRmssdGranularDatum]?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct HrGranularDataBPM : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let bpm: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct HrvRmssdGranularDatum : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let hrvRmssd: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct HrvSdnnGranularDatum : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let hrvSdnn: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct SleepScores : Swift.Codable {
+  public let sleepQualityRating1_5_Score: Swift.Int?, sleepEfficiency1_100_Score: Swift.Int?, sleepGoalSeconds: Swift.Int?, sleepContinuity1_5_Score: Swift.Int?
+  public let sleepContinuity1_5_Rating: Swift.Int?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct TemperatureRelatedData : Swift.Codable {
+  public let temperatureMinimumCelsius: RookWatchSDK.RookTemperatureExtractionItem?, temperatureAvgCelsius: RookWatchSDK.RookTemperatureExtractionItem?, temperatureMaxCelsius: RookWatchSDK.RookTemperatureExtractionItem?
+  public let temperatureGranularDataCelsius: [RookWatchSDK.TemperatureGranularDataCelsius]?
+  public let temperatureDeltaCelsius: RookWatchSDK.RookTemperatureExtractionItem?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct TemperatureGranularDataCelsius : Swift.Codable {
+  public let datetime: Foundation.Date
+  public let temperatureCelsius: Swift.Int
+  public let measurementType: Swift.String
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct RookMetaDataEvent : Swift.Codable {
+  public var datetime: Foundation.Date
+  public var userId: Swift.String?
+  public var sourceOfData: [Swift.String]
+  public var wasTheUserUnderPhysicalActivity: Swift.Bool
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionHeartRateEventObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc public var metadata: RookWatchSDK.RookExtractionMetaDataEventObjc
+  @objc public var heartRateData: RookWatchSDK.RookHeartRateDataEventExtractionObjc
+  @objc public var dataEvent: Foundation.Data? {
+    @objc get
+  }
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@objc public class RookHeartRateDataEventExtractionObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc final public let hrMaxBPM: Swift.Int, hrMinimumBPM: Swift.Int, hrAvgBPM: Swift.Int, hrRestingBPM: Swift.Int
+  @objc final public let hrGranularDataBPM: [RookWatchSDK.RookExtractionHrGranularDataBPMObjc]?
+  @objc final public let hrvAvgRmssdNumber: Swift.Int, hrvAvgSdnnNumber: Swift.Int
+  @objc final public let hrvSdnnGranularData: [RookWatchSDK.RookExtractionHrvSdnnGranularDatumObjc]?
+  @objc final public let hrvRmssdGranularData: [RookWatchSDK.RookExtractionHrvRmssdGranularDatumObjc]?
+  @objc public init(hrMaxBPM: Swift.Int, hrMinimumBPM: Swift.Int, hrAvgBPM: Swift.Int, hrRestingBPM: Swift.Int, hrGranularDataBPM: [RookWatchSDK.RookExtractionHrGranularDataBPMObjc], hrvAvgRmssdNumber: Swift.Int, hrvAvgSdnnNumber: Swift.Int, hrvSdnnGranularData: [RookWatchSDK.RookExtractionHrvSdnnGranularDatumObjc], hrvRmssdGranularData: [RookWatchSDK.RookExtractionHrvRmssdGranularDatumObjc])
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionHrGranularDataBPMObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc final public let datetime: Foundation.Date
+  @objc final public let bpm: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionHrvRmssdGranularDatumObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc final public let datetime: Foundation.Date
+  @objc final public let hrvRmssd: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers @objc public class RookExtractionHrvSdnnGranularDatumObjc : ObjectiveC.NSObject, Swift.Codable {
+  @objc final public let datetime: Foundation.Date
+  @objc final public let hrvSdnn: Swift.Int
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+public struct RookPositionItem : Swift.Encodable {
+  public let latitude: Swift.Double
+  public let longitude: Swift.Double
+  public func encode(to encoder: Swift.Encoder) throws
+}
+final public class RookExtractionEventManager {
+  public init()
+  final public func getPhysicalHeartRateEvents(date: Foundation.Date, completion: @escaping (Swift.Result<[RookWatchSDK.RookHeartRateEvent], Swift.Error>) -> Swift.Void)
+  final public func getBodyHeartRateEvents(date: Foundation.Date, completion: @escaping (Swift.Result<[RookWatchSDK.RookHeartRateEvent], Swift.Error>) -> Swift.Void)
+  final public func getPhysicalOxygenationEvents(date: Foundation.Date, completion: @escaping (Swift.Result<[RookWatchSDK.RookOxygenationEvent], Swift.Error>) -> Swift.Void)
+  final public func getBodyOxygenationEvents(date: Foundation.Date, completion: @escaping (Swift.Result<[RookWatchSDK.RookOxygenationEvent], Swift.Error>) -> Swift.Void)
+  final public func getActivityEvents(date: Foundation.Date, completion: @escaping (Swift.Result<[RookWatchSDK.RookActivityEvent], Swift.Error>) -> Swift.Void)
+  final public func getLastExtractionDate(of summary: RookWatchSDK.RookDataType) -> Foundation.Date?
+  @objc deinit
+}
+public struct URLParameterEncoder : RookWatchSDK.ParameterEncoder {
+  public static func encode(urlRequest: inout Foundation.URLRequest, with parameters: RookWatchSDK.Parameters) throws
+}
+public struct RookUserInfoData : Swift.Codable {
+  public var metaData: RookWatchSDK.RookUserInfoMetaData?
+  public var userInformation: RookWatchSDK.RookUserInformation?
+  public var userBodyMetrics: RookWatchSDK.RookUserBodyMetrics?
+  public func getDictionary() -> [Swift.String : Any]
+  public func getData() -> Foundation.Data?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct RookUserInfoMetaData : Swift.Codable {
+  public var datetime: Foundation.Date
+  public var userID: Swift.String?
+  public var sourceOfData: [Swift.String]
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct RookUserInformation : Swift.Codable {
+  public var sex: Swift.String?
+  public var gender: Swift.String?
+  public var dateOfBirth: Foundation.Date?
+  public var country: Swift.String?
+  public var state: Swift.String?
+  public var city: Swift.String?
+  public var ethnicity: Swift.String?
+  public var income: Swift.Double?
+  public var maritalStatus: Swift.String?
+  public var timeZone: Swift.Int?
+  public var education: Swift.String?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct RookUserBodyMetrics : Swift.Codable {
+  public var height: Swift.Int?
+  public var weight: Swift.Int?
+  public var dateOfBirth: Foundation.Date?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct RookCadenceGranularItem : Swift.Encodable {
+  public let datetime: Foundation.Date
+  public let intervalDurationSeconds: Swift.Int
+  public let cadenceRpm: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+}
+extension RookWatchSDK.LastEventDataSyncType : Swift.Equatable {}
+extension RookWatchSDK.LastEventDataSyncType : Swift.Hashable {}
+extension RookWatchSDK.LastEventDataSyncType : Swift.RawRepresentable {}
+extension RookWatchSDK.TimeZoneErrors : Swift.Equatable {}
+extension RookWatchSDK.TimeZoneErrors : Swift.Hashable {}
+extension RookWatchSDK.TimeZoneErrors : Swift.RawRepresentable {}
+extension RookWatchSDK.RookUsersEnvironment : Swift.Equatable {}
+extension RookWatchSDK.RookUsersEnvironment : Swift.Hashable {}
+extension RookWatchSDK.RookExtractionEnvironment : Swift.Equatable {}
+extension RookWatchSDK.RookExtractionEnvironment : Swift.Hashable {}
+extension RookWatchSDK.LastSummaryDateSyncType : Swift.Equatable {}
+extension RookWatchSDK.LastSummaryDateSyncType : Swift.Hashable {}
+extension RookWatchSDK.LastSummaryDateSyncType : Swift.RawRepresentable {}
+extension RookWatchSDK.NetworkResponse : Swift.Equatable {}
+extension RookWatchSDK.NetworkResponse : Swift.Hashable {}
+extension RookWatchSDK.NetworkResponse : Swift.RawRepresentable {}
+extension RookWatchSDK.RookTransmissionEnvironment : Swift.Equatable {}
+extension RookWatchSDK.RookTransmissionEnvironment : Swift.Hashable {}
+extension RookWatchSDK.RookError : Swift.Equatable {}
+extension RookWatchSDK.RookError : Swift.Hashable {}
+extension RookWatchSDK.RookError : Swift.RawRepresentable {}
+extension RookWatchSDK.ExtractionErrors : Swift.Equatable {}
+extension RookWatchSDK.ExtractionErrors : Swift.Hashable {}
+extension RookWatchSDK.ExtractionErrors : Swift.RawRepresentable {}
+extension RookWatchSDK.NetworkError : Swift.Equatable {}
+extension RookWatchSDK.NetworkError : Swift.Hashable {}
+extension RookWatchSDK.NetworkError : Swift.RawRepresentable {}
+extension RookWatchSDK.RookDataType : Swift.Equatable {}
+extension RookWatchSDK.RookDataType : Swift.Hashable {}
+extension RookWatchSDK.RookDataType : Swift.RawRepresentable {}
+extension RookWatchSDK.AnalyticPlatform : Swift.Equatable {}
+extension RookWatchSDK.AnalyticPlatform : Swift.Hashable {}
+extension RookWatchSDK.HTTPMethod : Swift.Equatable {}
+extension RookWatchSDK.HTTPMethod : Swift.Hashable {}
+extension RookWatchSDK.HTTPMethod : Swift.RawRepresentable {}
+extension RookWatchSDK.SleepEvent : Swift.Equatable {}
+extension RookWatchSDK.SleepEvent : Swift.Hashable {}
+extension RookWatchSDK.SleepEvent : Swift.RawRepresentable {}
+extension RookWatchSDK.HealthDataType : Swift.Equatable {}
+extension RookWatchSDK.HealthDataType : Swift.Hashable {}
+extension RookWatchSDK.HealthDataType : Swift.RawRepresentable {}
+extension RookWatchSDK.RookEnvironment : Swift.Equatable {}
+extension RookWatchSDK.RookEnvironment : Swift.Hashable {}

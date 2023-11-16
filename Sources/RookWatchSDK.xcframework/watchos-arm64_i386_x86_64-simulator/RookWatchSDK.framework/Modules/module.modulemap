@@ -1,0 +1,11 @@
+framework module RookWatchSDK {
+  umbrella header "RookWatchSDK.h"
+
+  export *
+  module * { export * }
+}
+
+module RookWatchSDK.Swift {
+  header "RookWatchSDK-Swift.h"
+  requires objc
+}
